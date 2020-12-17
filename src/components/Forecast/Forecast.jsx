@@ -1,103 +1,53 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
-import BeachInfo from './BeachInfo';
+import React from "react";
 
-const Content = styled.div`
-  height: auto;
-  margin: 0;
-  .card {
-    box-shadow: 0 0 5px 0 #000;
+class Forecast extends React.Component {
+  state = {
+    Quality_Conditions: undefined,
+    city: undefined,
+    Spot_Name: undefined,
+    ID_Pico_Certo: undefined,
+    Wave_Primary_Direction: undefined,
+    Wave_Primary_Direction: undefined,
+    Wave_Min_Height: undefined,
+    Wave_Max_Height: undefined,
+    Water_Temperature: undefined,
   }
-  .charts {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  @media (max-width: 1010px) {
-    .charts {
-      flex-direction: column;
-    }
-    .charts > * {
-      width: 100%;
-    }
-  }
-
-  label {
-    font-size: 1.5em;
-    color: #2fbc1a;
-  }
-`;
-
-class Forecast extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      //Dados sobre o pico (dummy data)
-      Data: 4,
-      City: 'Cabo Frio',
-      Beach_Name: '',
-      Beach_Name: '',    
-      weather: '',
-      temperature: 0,
-      Wave_Type: '',
-
-      //ratings data
-      Quality_Conditions: 0,
-      Wave_Primary_Direction: '',
-      Wave_Secundary_Direction: '',
-
-      //swell data
-      Wave_Min_Height: 0,
-      Wave_Max_Height: 0,
-      LevelSTR: 0,
-
-    };
-  }
-
-  fetchData(Beach_Name) {
-    let forecastNumber = 0;
-    axios
-      .get(
-        '../../../alerta-personalizado.json'
-      )
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-        this.setState({
-          Data: res.data.Data,
-          City: res.data.City,
-          Beach_Name: res.data.Beach_Name,
-          Beach_Name: res.data.Beach_Name,
-          Wave_Type: res.data.Wave_Type,
-
-          //ratings data
-          Quality_Conditions: res.data[forecastNumber].Quality_Conditions,
-
-          Wave_Primary_Direction: res.data[forecastNumber].Wave_Primary_Direction,
-          Wave_Secundary_Direction: res.data[forecastNumber].Wave_Secundary_Direction,
-          //swell data
-          Wave_Min_Height: res.data[forecastNumber].Wave_Min_Height,
-
-          Wave_Max_Height: res.data[forecastNumber].Wave_Max_Height,
-          LevelSTR: res.data[forecastNumber].LevelSTR
-
-        });
-      })
-      .catch(err => console.log(err));
-  }
-
-  componentDidMount() {
-    this.fetchData(this.props.Beach_Name);
-  }
-
-  //change spot
-  componentDidUpdate(prevProps) {
-    if (this.props.Beach_Name !== prevProps.Beach_Name) {
-      this.fetchData(this.props.Beach_Name);
+  getWeather = async (e) => {
+    e.preventDefault();
+    const ID_Pico_Certo = e.target.elements.ID_Pico_Certo.value;
+    const Spot = e.target.elements.Spot_Name.value;
+    const api_call = await fetch('http://demo6039565.mockable.io/PrevisaoOPC');
+    const data = await api_call.json();
+    console.logo(data)
+    if (ID_Pico_Certo && Spot) {
+      this.setState({
+        Quality_Conditions: data.Quality_Conditions,
+        city: data.city,
+        Spot_Name: data.Spot_Name,
+        ID_Pico_Certo: data.ID_Pico_Certo,
+        Wave_Type: data.Wave_Type,
+        Wave_Primary_Direction: data.Wave_Primary_Direction,
+        Wave_Primary_Direction: data.Wave_Primary_Direction,
+        Wave_Min_Height: data.Wave_Min_Height,
+        Wave_Max_Height: data.Wave_Max_Height,
+        Water_Temperature: data.Water_Temperature,        
+        error: ""
+      });
+    } else {
+      this.setState({
+        Quality_Conditions: undefined,
+        city: undefined,
+        Spot_Name: undefined,
+        ID_Pico_Certo: undefined,
+        Wave_Primary_Direction: undefined,
+        Wave_Primary_Direction: undefined,
+        Wave_Min_Height: undefined,
+        Wave_Max_Height: undefined,
+        Water_Temperature: undefined,
+        error: "Please enter the values."
+      });
     }
   }
-
   render() {
     const {
 

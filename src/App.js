@@ -33,15 +33,15 @@ class App extends Component {
             <Content>
               <Navbar Beach_Name={this.state.Beach_Name} />
               <Switch>
-                <Route
-                  exact
-                  path="/"
-                  render={props => (
-                    <BeachInfo
-                      {...props}
-                      change={this.change}
-                      value={this.state.Beach_Name}
-                      spotId={this.state.Spot_Name}
+                //<Route
+                  //exact
+                  //path="/"
+                  //render={props => (
+                    <Forecast
+                      //{...props}
+                      //change={this.change}
+                      //value={this.state.Beach_Name}
+                      //spotId={this.state.Spot_Name}
                     />
                   )}
                 />
